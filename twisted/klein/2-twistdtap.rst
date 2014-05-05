@@ -1,6 +1,6 @@
-==========================================
-Using ``twistd`` to Start Your Application
-==========================================
+============================================
+ Using ``twistd`` to Start Your Application
+============================================
 
 ``twistd`` (pronounced "twist-dee") is an application runner for Twisted applications.
 It takes care of starting your app, setting up loggers, daemonising, and providing a nice interface to start it.
@@ -14,7 +14,7 @@ To enable this functionality, just expose the ``resource`` object of your Klein 
 
 .. literalinclude:: codeexamples/twistdPlugin.py
 
-Then run it::
+Then run it (in this example, the file above is saved as ``twistdPlugin.py``::
 
   twistd -n web --class=twistdPlugin.resource
 
