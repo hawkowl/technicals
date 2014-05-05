@@ -14,7 +14,9 @@ To enable this functionality, just expose the ``resource`` object of your Klein 
 
 .. literalinclude:: codeexamples/twistdPlugin.py
 
-Then run it (in this example, the file above is saved as ``twistdPlugin.py``::
+Then run it (in this example, the file above is saved as ``twistdPlugin.py``:
+
+.. code-block:: sh
 
   $ twistd -n web --class=twistdPlugin.resource
 
@@ -28,12 +30,16 @@ Using HTTPS via the ``twistd web`` Plugin
 
 The ``twistd web`` plugin has inbuilt support for HTTPS, assuming you have TLS support for Twisted.
 
-As an example, we will create some self-signed certs -- for the second command, the answers don't really matter, as this is only a demo::
+As an example, we will create some self-signed certs -- for the second command, the answers don't really matter, as this is only a demo:
+
+.. code-block:: sh
 
   $ openssl genrsa > privkey.pem
   $ openssl req -new -x509 -key privkey.pem -out cert.pem -days 365
 
-We will then run our plugin, specifying a HTTPS port and the relevant certificates::
+We will then run our plugin, specifying a HTTPS port and the relevant certificates:
+
+.. code-block:: sh
 
   $ twistd -n web --class=twistdPlugin.resource -c cacert.pem -k privkey.pem --https=4433
 
