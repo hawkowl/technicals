@@ -1,10 +1,8 @@
-==========================================================
-Introduction -- Using ``twistd`` to Start Your Application
-==========================================================
+==========================================
+Using ``twistd`` to Start Your Application
+==========================================
 
-.. note::
 
-    **This document is still a work in progress.** Please comment on `the GitHub PR <https://github.com/twisted/klein/pull/46>`_ with any inaccuracies, comments or suggestions.
 
 things we should talk about here:
 

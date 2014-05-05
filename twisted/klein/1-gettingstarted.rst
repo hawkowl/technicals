@@ -1,6 +1,6 @@
-===============================
-Introduction -- Getting Started
-===============================
+===============
+Getting Started
+===============
 
 Klein is a micro-framework for developing production-ready web services with Python, built off Werkzeug and Twisted.
 The purpose of this introduction is to show you how to install, use, and deploy Klein-based web applications.
