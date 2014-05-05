@@ -4,4 +4,5 @@ Twisted Technicals
 .. toctree::
    :maxdepth: 2
 
-   sendingmail/index.rst
+   mail/index.rst
+   klein/index.rst
