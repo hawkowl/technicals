@@ -41,7 +41,7 @@ We will then run our plugin, specifying a HTTPS port and the relevant certificat
 
 .. code-block:: sh
 
-  $ twistd -n web --class=twistdPlugin.resource -c cacert.pem -k privkey.pem --https=4433
+  cert.pem -k privkey.pem --https=4433
 
 This will then start a HTTPS server on port 4433.
 Visiting ``https://localhost:4433`` will give you a certificate error -- if you add a temporary exception, you will then be given the "Hello, world!" page.
