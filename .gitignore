@@ -3,3 +3,4 @@ twistd.pid
 twistd.log
 .DS_Store
 *~
+*.pyc
