@@ -1,5 +1,5 @@
-Mail
-====
+Twisted Mail
+============
 
 .. toctree::
    :maxdepth: 2
