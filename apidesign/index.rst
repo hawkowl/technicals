@@ -6,7 +6,7 @@ This contains my technicals about API design.
 Contents:
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
 
    versioning
    authentication

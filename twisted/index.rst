@@ -8,3 +8,4 @@ This contains my technicals about Twisted -- using Mail, Web, Deferreds, and a b
 
    mail/index.rst
    klein/index.rst
+   web/index.rst
