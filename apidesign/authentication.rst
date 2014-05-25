@@ -2,12 +2,15 @@ Authentication
 ==============
 
 **Tenet:**
-Good APIs have good authentication options.
+Good API services have good authentication options.
 
 For APIs that authenticate directly, these options are HTTP BASIC (*only* to be used if the transport is secure) or HMAC.
+HTTP Digest requires challenge-response, which in my opinion makes it less useful for REST APIs.
+
+It goes without saying that your API should provide :doc:`security <security>` via TLS, to protect these creds.
 
 **Tenet:**
-Good APIs don't use user credidentials directly.
+Good API services don't use user credidentials directly.
 
 If you use HTTP BASIC, do **not** use the user's creds -- generate an API key instead.
 With an API key, you can:
