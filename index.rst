@@ -1,5 +1,5 @@
-Welcome to HawkOwl's Technicals!
-================================
+The HawkOwl Technicals
+======================
 
 This is the start of writing a book -- one article at a time.
 
