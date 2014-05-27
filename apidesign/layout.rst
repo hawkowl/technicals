@@ -70,7 +70,7 @@ This example creates a new customer, using the API key ``sk_test_BQokikJOvBiI2Hl
 
 .. note::
 
-   ``-d`` is the argument for adding HTTP POST data in cURL.
+   ``-d`` is the argument for adding HTTP ``POST`` data in cURL.
    The presence of ``-d`` changes the verb to ``POST`` implicitly.
 
 The response then gives the identifier of the created customer.
@@ -86,7 +86,8 @@ This example, also from the Stripe API docs, fetches a customer by ``GET`` ting 
 The URL is built as ``object/identifier`` -- customer ``1`` would be found at ``customers/1``, customer ``foo`` would be found at ``customers/foo``, and so on.
 
 Performing actions on this particular customer becomes changing the HTTP verb from ``GET`` to the action you want.
-Stripe's API uses ``POST`` for updating, as shown in the example , but there is a ``PATCH``
+Stripe's API uses ``POST`` for updating.
+There is a ``PATCH`` verb which developers could implement for updating instead.
 
 .. code-block:: sh
 
@@ -104,3 +105,9 @@ Deleting a customer uses the ``DELETE`` verb:
 .. note::
 
    Use of ``-X`` overrides the HTTP verb that cURL uses.
+
+Good URIs Never Change
+~~~~~~~~~~~~~~~~~~~~~~
+
+The benefit of such a layout is that the reference to any particular object always stays the same.
+There is no 'leaking through' of the framework or the functions in the implementation, since you are putting data at an object, not running a 'function'.
