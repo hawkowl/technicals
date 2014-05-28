@@ -105,9 +105,8 @@ pygments_style = 'sphinx'
 # a list of builtin themes.
 html_theme = 'default'
 
-import sphinx_readable_theme
-
-html_theme_path = [sphinx_readable_theme.get_html_theme_path()]
+sys.path.append(os.path.abspath('_themes'))
+html_theme_path = ['_themes']
 html_theme = 'readable'
 
 # Theme options are theme-specific and customize the look and feel of a theme
