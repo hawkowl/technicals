@@ -1,0 +1,10 @@
+<h3><a href="{{ pathto(master_doc) }}">{{ _('The HawkOwl Technicals') }}</a></h3>
+<hr>
+{{ toctree() }}
+<hr>
+{%- if display_toc %}
+  <h4><a href="{{ pathto(master_doc) }}">{{ _('In This Section') }}</a></h4>
+  <hr>
+  {{ toc }}
+<hr>
+{%- endif %}
