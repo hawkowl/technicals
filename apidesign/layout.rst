@@ -1,17 +1,20 @@
 Layout
 ======
 
-Single Endpoint API
--------------------
+Being built on top of HTTP, all web APIs use URLs (Uniform Resource Locators) in some way.
+There are three main patterns in URL layout, which I have termed **Single Endpoint**, **Function Endpoint**, and **RFC-3986 Style**.
 
-An API where everything is on a single endpoint.
-Query arguments are then added to this endpoint, with one or more of them indicating what function should be run, and one or more indicating what data or identifier to operate on.
+Single Endpoint
+---------------
+
+A *Single Endpoint* API is where all access is done through a single endpoint -- that is, one URL -- no matter what you are doing with it.
+Query arguments are then added to this endpoint, somehow indicating what function should be run and what data or identifier to operate on.
 
 Real World Example: Linode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The `Linode API <https://www.linode.com/api>`_ uses this structure.
-Their base API endpoint is located at``https://api.linode.com/``, and everything is run from this root.
+Their base API endpoint is located at ``https://api.linode.com/``, and everything is run from this root.
 
 An example of an API request that runs the ``test.echo`` function with the API key ``sekrit`` is:
 
@@ -20,11 +23,11 @@ An example of an API request that runs the ``test.echo`` function with the API k
     $ curl "https://api.linode.com/?api_key=sekrit&api_action=test.echo&foo=bar"
 
 
-Function Endpoint API
----------------------
+Function Endpoint
+-----------------
 
 An API where there are multiple endpoints, each providing a function to run. 
-Query arguments are then added to these endpoints, which specify what data or identifier to operate on.
+Query arguments are then added to these endpoints, specifying what data or identifier to operate on.
 
 Example: Blog
 ~~~~~~~~~~~~~
@@ -46,8 +49,8 @@ To delete it, they would then use this request:
     $ curl "https://blog.example.com/api/delete_post?id=1"
 
 
-RFC-3986 Style API
-------------------
+RFC-3986 Style
+--------------
 
 An API which is laid out in the vein of :rfc:`3986`.
 This is characterised by object types and identifiers being in the URI.
