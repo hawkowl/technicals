@@ -1,7 +1,7 @@
 The HawkOwl Technicals
 ======================
 
-**technical** (/ˈtɛknɪk(ə)l/), *noun*
+**technical**, *noun*
     *...an article, or series of articles, which pertain to a subject that requires special knowledge to be understood.*
 
 The Technicals are my attempt at writing a book, one useful technical subject at a time.
