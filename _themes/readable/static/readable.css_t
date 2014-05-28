@@ -160,7 +160,7 @@ div.body h4 { color: #212224; }
 div.body h5 { color: #000; }
 div.body h6 { color: #777; }
  
-div.body h1 { margin: 0 0 10px 0; }
+div.body h1 { margin: 0 0 20px 0; }
 div.body h2 { margin: 20px 0px 10px 0px; }
 div.body h3 { margin: 15px 0px 10px 0px; }
 div.body h4,
