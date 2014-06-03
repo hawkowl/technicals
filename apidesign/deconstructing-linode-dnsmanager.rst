@@ -36,7 +36,7 @@ The response to each request is a JSON object, consisting of three keys:
 * ``DATA`` -- the data of the response
 * ``ACTION`` -- the action that was run
 * ``ERRORARRAY`` -- an array of error messages, empty if successful.
-  The errors are in therwise a list of dicts containing the keys ``ERRORCODE`` and ``ERRORMESSAGE``, which is the code
+  The errors are in therwise a list of dicts containing the keys ``ERRORCODE`` and ``ERRORMESSAGE``, which is the code and the human readable message respectively.
 
 
 How is the API used?
@@ -70,7 +70,7 @@ This will respond with something similar to the following:
    All instances of ``SECRET_KEY`` would be where a valid Linode API key would be.
    It's much too long to display inline (60+ characters).
 
-Linode provides an "echo" function for testing, and looks like the following:
+Linode provides an "echo" function for testing.
 
 .. code-block:: sh
 
@@ -79,7 +79,7 @@ Linode provides an "echo" function for testing, and looks like the following:
           -d "api_action=test.echo" \
 	  -d "foo=bar"
 
-The ``test.echo`` function simply responds with what it was given, so it will respond as such if successful:
+Since ``test.echo`` function simply responds with what it was given, that request will respond with this on success:
 
 .. code-block:: json
 
@@ -90,3 +90,85 @@ The ``test.echo`` function simply responds with what it was given, so it will re
           "foo": "bar"
        }
     }
+
+If something goes wrong, it will respond with an error instead:
+
+.. code-block:: json
+
+     {
+         "ERRORARRAY": [{
+	     "ERRORCODE": 4,
+	     "ERRORMESSAGE": "Authentication failed"
+	 }],
+	 "ACTION": "test.echo",
+	 "DATA": {}
+    }
+
+
+Using the API in context
+------------------------
+
+To create a domain, we need to use the ``domain.create`` method.
+This takes a `number of arguments <https://www.linode.com/api/dns/domain.create>`_, but a working command is below.
+
+.. note::
+   
+   The API docs for Linode's ``domain.create`` method say that ``CustomerID`` is required.
+   This is wrong.
+
+.. code-block:: sh
+
+   $ curl "https://api.linode.com/" \
+          -d "api_key=SECRETKEY" \
+          -d "api_action=domain.create" \
+	  -d "Domain=mycoolawesomesite.net" \
+	  -d "Type=master" \
+	  -d "SOA_Email=hawkowl@atleastfornow.net"
+
+.. code-block:: json
+
+    {
+        "ERRORARRAY": [],
+	"ACTION": "domain.create"
+	"DATA": {
+	    "DomainID": 12345
+	}
+    }
+
+``DomainID`` is what you want to hold onto.
+This is the ID of your new domain, and you will need it to query it, delete it, or add entries to it.
+
+We can query it like this:
+
+.. code-block:: sh
+
+   $ curl "https://api.linode.com/" \
+          -d "api_key=SECRETKEY" \
+          -d "api_action=domain.list" \
+	  -d "DomainID=12345"
+
+.. code-block:: json
+
+    {
+        "ERRORARRAY": [],
+	"ACTION": "domain.list",
+	"DATA": [{
+            "DOMAINID": 12345,
+            "DESCRIPTION": "",
+            "EXPIRE_SEC": 0,
+            "RETRY_SEC": 0,
+            "STATUS": 1,
+            "LPM_DISPLAYGROUP": "",
+            "MASTER_IPS": "",
+            "REFRESH_SEC": 0,
+            "SOA_EMAIL": "hawkowl@atleastfornow.net",
+            "TTL_SEC": 0,
+            "DOMAIN": "mycoolawesomesite.net",
+            "AXFR_IPS": "none",
+            "TYPE": "master"
+	}]	
+    }
+
+.. note::
+   
+   Not giving the ``DomainID`` key will make it return all domains under your account.

@@ -90,13 +90,16 @@ The URL is built as ``object/identifier`` -- customer ``1`` would be found at ``
 
 Performing actions on this particular customer becomes changing the HTTP verb from ``GET`` to the action you want.
 Stripe's API uses ``POST`` for updating.
-There is a ``PATCH`` verb which developers could implement for updating instead.
 
 .. code-block:: sh
 
     $ curl https://api.stripe.com/v1/customers/cus_46X1iCm5JBayfU \
            -u sk_test_BQokikJOvBiI2HlWgH4olfQ2: \
 	   -d "description=Customer for test@example.com"
+
+.. note::
+
+   There is a ``PATCH`` verb which developers could implement for updating instead.
 
 Deleting a customer uses the ``DELETE`` verb:
 
