@@ -172,3 +172,36 @@ We can query it like this:
 .. note::
    
    Not giving the ``DomainID`` key will make it return all domains under your account.
+
+We can then add what Linode calls "resources" to this domain, such as subdomains.
+
+.. code-block:: sh
+
+   $ curl "https://api.linode.com/" \
+          -d "api_key=SECRETKEY" \
+          -d "api_action=domain.resource.create" \
+	  -d "DomainID=12345" \
+	  -d "Type=A" \
+	  -d "Name=www" \
+	  -d "Target=203.0.113.27"
+
+.. code-block:: json
+
+   {
+        "ERRORARRAY": [],
+	"ACTION": "domain.resource.create",
+	"DATA": {
+	    "ResourceID": 7654321
+	}
+   }
+
+There are several kinds of types of resources -- ``A``, ``AAAA``, ``TXT``, ``MX``, ``SRV``, ``NS`` and ``CNAME``.
+They all share the same resource creation function, and some of the meanings of the parameters are overloaded.
+None of the parameters other than ``Type`` or the ``DomainID`` are required in the documentation, despite being required for certain types.
+For instance, the Target parameter has the following docs:
+
+.. epigraph::
+
+   When Type=MX the hostname. When Type=CNAME the target of the alias. When Type=TXT the value of the record. When Type=A or AAAA the token of '[remote_addr]' will be substituted with the IP address of the request.
+
+The full documentation can be found `on Linode's site <https://www.linode.com/api/dns/domain.resource.create>`_.
