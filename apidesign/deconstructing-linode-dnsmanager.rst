@@ -236,3 +236,22 @@ Otherwise, all resources under that domain are given.
 	 "TYPE": "A"
       }]
    }
+
+
+Shortfalls of the API
+---------------------
+
+As I see it, the current Linode API has the following shortfalls:
+
+* The single endpoint is shared between all Linode API services, and there is no easy or quick way to restrict an API key to only access the DNSManager API.
+  The docs say that you can achieve this by creating users and restricting their permissions, but I've not researched this further.
+* There is no versioning of the API.
+* The function-based approach makes it more complex to use the API by splitting up the reference to the object you wish to access over a method name (eg. ``domain.resource.list``) and then a set of parameters, rather than having it directly in the URI.
+* Creating domains and resources are more complex than required due to meanings of parameters being overloaded.
+  The documentation isn't great at explaining what you exactly need, either.
+
+
+Re-engineering the API
+----------------------
+
+Now that we have analysed how the API works and used it in context, I will now redevelop it, and provide a proof in concept using the `Twisted asynchonous networking framework <https://twistedmatrix.com/trac/>`_.
