@@ -197,11 +197,42 @@ We can then add what Linode calls "resources" to this domain, such as subdomains
 
 There are several kinds of types of resources -- ``A``, ``AAAA``, ``TXT``, ``MX``, ``SRV``, ``NS`` and ``CNAME``.
 They all share the same resource creation function, and some of the meanings of the parameters are overloaded.
-None of the parameters other than ``Type`` or the ``DomainID`` are required in the documentation, despite being required for certain types.
+None of the parameters other than ``Type`` or the ``DomainID`` are marked as universally required in the documentation, requiring you to read the description to see if it applies to the type you are creating.
+
 For instance, the Target parameter has the following docs:
 
 .. epigraph::
 
-   When Type=MX the hostname. When Type=CNAME the target of the alias. When Type=TXT the value of the record. When Type=A or AAAA the token of '[remote_addr]' will be substituted with the IP address of the request.
+   *When Type=MX the hostname. When Type=CNAME the target of the alias. When Type=TXT the value of the record. When Type=A or AAAA the token of '[remote_addr]' will be substituted with the IP address of the request.*
 
-The full documentation can be found `on Linode's site <https://www.linode.com/api/dns/domain.resource.create>`_.
+The full documentation for this function can be found `on Linode's site <https://www.linode.com/api/dns/domain.resource.create>`_.
+
+Listing resources works more or less the same as ``domain.list``.
+A ``DomainID`` is given to ``domain.resources.list``, with an optional ``ResourceID`` to display only a single resource.
+Otherwise, all resources under that domain are given.
+
+.. code-block:: sh
+
+   $ curl "https://api.linode.com/" \
+          -d "api_key=SECRETKEY" \
+          -d "api_action=domain.resource.list" \
+	  -d "DomainID=12345" 
+
+.. code-block:: json
+
+   {
+      "ERRORARRAY": [],
+      "ACTION": "domain.resource.list",
+      "DATA": [{
+	 "DOMAINID": 12345,
+	 "PORT": 80,
+	 "RESOURCEID": 7654321,
+	 "NAME": "www",
+	 "WEIGHT": 5,
+	 "TTL_SEC": 0,
+	 "TARGET": "203.0.113.27",
+	 "PRIORITY": 10,
+	 "PROTOCOL": "",
+	 "TYPE": "A"
+      }]
+   }
