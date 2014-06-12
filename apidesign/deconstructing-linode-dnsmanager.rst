@@ -254,4 +254,75 @@ As I see it, the current Linode API has the following shortfalls:
 Re-engineering the API
 ----------------------
 
-Now that we have analysed how the API works and used it in context, I will now redevelop it, and provide a proof in concept using the `Twisted asynchonous networking framework <https://twistedmatrix.com/trac/>`_.
+Now that we have analysed how the API works and used it in context, I will now re-engineer it from the ground up, providing a proof in concept using the `Twisted asynchonous networking framework <https://twistedmatrix.com/trac/>`_ and the `Saratoga API development framework <https://github.com/hawkowl/saratoga>`_.
+
+Layout
+~~~~~~
+
+The API will be in the RFC-3986 Style, with an explicit version in the path.
+The whole API for this example will be dedicated to the DNSManager API.
+
+Models
+~~~~~~
+
+The API needs to handle a few particular data models:
+
+* Master Zones (which can have resources)
+* Slave Zones (which can not have resources)
+* Resources (individual records, under a zone)
+
+I these can be better termed as **domains**, **zone mirrors**, and **records**, respectively.
+
+Since we have two top level models, we should have them at the root:
+
+.. code-block:: txt
+
+   /domains
+   /zonemirrors
+
+You can then refer to individual domains and mirrors with an ID:
+
+.. code-block:: txt
+
+   /domains
+   /domains/<ID>
+   /zonemirrors
+   /zonemirrors/<ID>
+
+As domains can have records, we need to be able to refer to them too:
+
+.. code-block:: txt
+
+   /domains
+   /domains/<ID>
+   /domains/<ID>/records
+   /domains/<ID>/records/<ID>
+   /zonemirrors
+   /zonemirrors/<ID>
+
+But since different records have incredibly disparate data models depending on the type, it might be good to keep them seperate:
+
+.. code-block:: txt
+
+   /domains
+   /domains/<ID>
+   /domains/<ID>/A
+   /domains/<ID>/A/<ID>
+   /domains/<ID>/MX
+   /domains/<ID>/MX/<ID>
+   /domains/<ID>/NS
+   /domains/<ID>/NS/<ID>
+   /domains/<ID>/AAAA
+   /domains/<ID>/AAAA/<ID>
+   /domains/<ID>/TXT
+   /domains/<ID>/TXT/<ID>
+   /domains/<ID>/SRV
+   /domains/<ID>/SRV/<ID>
+   /domains/<ID>/CNAME
+   /domains/<ID>/CNAME/<ID>
+   /domains/<ID>/records
+   /zonemirrors
+   /zonemirrors/<ID>
+
+This lets us get all of the records in one go, or all the records of a specific type.
+Accessing a record individually has to be done through the correct type.
