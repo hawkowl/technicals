@@ -326,3 +326,9 @@ But since different records have incredibly disparate data models depending on t
 
 This lets us get all of the records in one go, or all the records of a specific type.
 Accessing a record individually has to be done through the correct type.
+
+This map looks a bit complicated.
+However, since every record type has different parameters, it makes a lot more sense to split them up.
+It also makes it easier to document and use, as you don't have overloaded meanings of each option.
+
+
