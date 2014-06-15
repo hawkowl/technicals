@@ -256,11 +256,6 @@ Re-engineering the API
 
 Now that we have analysed how the API works and used it in context, I will now re-engineer it from the ground up, providing a proof in concept using the `Twisted asynchonous networking framework <https://twistedmatrix.com/trac/>`_ and the `Saratoga API development framework <https://github.com/hawkowl/saratoga>`_.
 
-Layout
-~~~~~~
-
-The API will be in the RFC-3986 Style, with an explicit version in the path.
-The whole API for this example will be dedicated to the DNSManager API.
 
 Models
 ~~~~~~
@@ -270,8 +265,15 @@ The API needs to handle a few particular data models:
 * Master Zones (which can have resources)
 * Slave Zones (which can not have resources)
 * Resources (individual records, under a zone)
-
+ 
 I these can be better termed as **domains**, **zone mirrors**, and **records**, respectively.
+
+
+Layout
+~~~~~~
+
+The API will be in the RFC-3986 Style, with an explicit version in the path.
+The whole API for this example will be dedicated to the DNSManager API. An example of the root URI for v1 would be something like ``dns.api.linode.com/v1/``.
 
 Since we have two top level models, we should have them at the root:
 
@@ -324,11 +326,29 @@ But since different records have incredibly disparate data models depending on t
    /zonemirrors
    /zonemirrors/<ID>
 
-This lets us get all of the records in one go, or all the records of a specific type.
+This lets us get all of the records of a domain in one go, or all the records of a specific type on the domain.
 Accessing a record individually has to be done through the correct type.
 
 This map looks a bit complicated.
 However, since every record type has different parameters, it makes a lot more sense to split them up.
 It also makes it easier to document and use, as you don't have overloaded meanings of each option.
+
+
+Domains
+~~~~~~~
+
+Domains ("master zones") are core to the API -- they are what everything else sits under.
+
+Adapting from the Linode API docs, this is the domain 'model':
+
+* Domain -- required (eg. ``atleastfornow.net``)
+* Start of Authority email -- required (eg. ``hawkowl@atleastfornow.net``)
+* Default Time To Live (for records that don't have a TTL specified)
+* Status (eg. disabled, active)
+* AXFR IPs (IP addresses allowed to transfer the zone)
+
+From this, we can develop the following JSON Schema for creating a Domain:
+
+.. literalinclude:: jsonschemas/domain-create.json
 
 

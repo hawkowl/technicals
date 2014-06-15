@@ -116,4 +116,6 @@ Good URIs Never Change
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The benefit of such a layout is that the reference to any particular object always stays the same.
-There is no 'leaking through' of the framework or the functions in the implementation, since you are putting data at an object, not running a 'function'.
+There is no 'leaking through' of the framework or the implementation, since you are sending data to an endpoint, not running a 'function'.
+
+

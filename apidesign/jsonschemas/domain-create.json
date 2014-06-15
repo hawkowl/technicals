@@ -1,0 +1,39 @@
+{
+    "description": "Domain -- Create",
+    "type": "object",
+    "required": ["domain", "soa"],
+    "properties": {
+	"domain": {
+	    "title": "The base for this domain.",
+	    "type": "string",
+	    "format": "hostname"
+	},
+	"soa": {
+	    "title": "Start Of Authority Email.",
+	    "type": "string",
+	    "format": "email"
+	},
+	"default_ttl": {
+	    "title": "Default TTL for records, in seconds.",
+	    "type": "integer",
+	    "default": 86000
+	},
+	"status": {
+	    "title": "The status of the domain.",
+	    "type": "string",
+	    "enum": ["active", "inactive"],
+	    "default": "active"
+	},
+	"axfr": {
+	    "title": "IP addresses which may AXFR the domain.",
+	    "type": "array",
+	    "uniqueItems": true,
+	    "items": {
+		"oneOf": [
+                    { "format": "ipv4" },
+                    { "format": "ipv6" }
+		]
+	    }
+	}
+    }
+}
