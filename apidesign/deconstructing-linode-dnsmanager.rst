@@ -351,4 +351,14 @@ From this, we can develop the following JSON Schema for creating a Domain:
 
 .. literalinclude:: jsonschemas/domain-create.json
 
+To put it simply, this means that a domain is an ``object`` (``dict``), and can have these properties.
+Out of those properties, ``domain`` and ``soa`` **must** be given.
+The rest are optional, and have defaults if they are not provided.
 
+But since we also want to validate *outputs* as well as inputs, lets also write a JSON Schema for the response.
+(It's generally good to respond as if they immediately did a ``GET`` request on the new resource.)
+
+.. literalinclude:: jsonschemas/domain-create-response.json
+
+They are nearly exactly similar, barring the inclusion of ``id`` in the response.
+By checking both the input and output, it is less likely that a bug will cause the API to return incorrect data or `data that it shouldn't <http://heartbleed.com/>`_.

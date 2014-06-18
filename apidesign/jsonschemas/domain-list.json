@@ -1,0 +1,42 @@
+{
+    "description": "Domain -- List",
+    "type": "array",
+    "items": {
+	"properties": {
+	    "id": {
+		"title": "The ID of this domain.",
+		"type": "integer"
+	    },
+	    "domain": {
+		"title": "The base for this domain.",
+		"type": "string",
+		"format": "hostname"
+	    },
+	    "soa": {
+		"title": "Start Of Authority Email.",
+		"type": "string",
+		"format": "email"
+	    },
+	    "default_ttl": {
+		"title": "Default TTL for records, in seconds.",
+		"type": "integer"
+	    },
+	    "status": {
+		"title": "The status of the domain.",
+		"type": "string",
+		"enum": ["active", "inactive"]
+	    },
+	    "axfr": {
+		"title": "IP addresses which may AXFR the domain.",
+		"type": "array",
+		"uniqueItems": true,
+		"items": {
+		    "oneOf": [
+			{ "format": "ipv4" },
+			{ "format": "ipv6" }
+		    ]
+		}
+	    }
+	}
+    }
+}
