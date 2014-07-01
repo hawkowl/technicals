@@ -28,6 +28,6 @@ This basically can be summed up as:
 * ``PATCH`` replaces portions of the current state of the resource.
 * ``POST`` gives a bundle of data to a resource, and it is completely up to the resource to decide what to do with it.
 
-This means that 
+This means that a system using only ``GET`` and ``POST`` can be fully RESTful
 
 
