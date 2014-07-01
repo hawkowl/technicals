@@ -31,7 +31,7 @@
 		"type": "array",
 		"uniqueItems": true,
 		"items": {
-		    "oneOf": [
+		    "anyOf": [
 			{ "format": "ipv4" },
 			{ "format": "ipv6" }
 		    ]

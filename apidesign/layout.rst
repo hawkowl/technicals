@@ -2,25 +2,39 @@ Layout
 ======
 
 Being built on top of HTTP, all web APIs use URLs (Uniform Resource Locators) in some way.
+As the name suggests, they are a standard way of locating *resources*, which is a 'thing' which can accept or provide data.
+
 There are three main patterns in URL layout, which I have termed **Single Endpoint**, **Function Endpoint**, and **RFC-3986 Style**.
+
 
 Single Endpoint
 ---------------
 
-A *Single Endpoint* API is where all access is done through a single endpoint -- that is, one URL -- no matter what you are doing with it.
-Query arguments are then added to this endpoint, somehow indicating what function should be run and what data or identifier to operate on.
+A *Single Endpoint* API is where all access is performed by communication through a single endpoint -- that is, one URL -- no matter what you are doing with it.
+Adding query arguments to requests to this endpoint then indicate what function should be run and what data to operate on.
+
+Since a single endpoint is used, the whole service is a single 'resource'.
+This is more akin to a remote procedure call interface than a REST-style web interface.
+
 
 Real World Example: Linode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The `Linode API <https://www.linode.com/api>`_ uses this structure.
-Their base API endpoint is located at ``https://api.linode.com/``, and everything is run from this root.
+The `Linode API <https://www.linode.com/api>`_ uses this structure, with their API endpoint at ``https://api.linode.com/``.
 
-An example of an API request that runs the ``test.echo`` function with the API key ``sekrit`` is:
+Using it involves  ``GET``/``POST`` requests to this URL, with an ``api_action`` query argument that denotes which 'function' to run.
+Arguments to the function specified are then given by additional query arguments.
+
+An example of an API request that runs the ``test.echo`` function with the API key ``SECRETKEY`` is:
 
 .. code-block:: sh
 
-    $ curl "https://api.linode.com/?api_key=sekrit&api_action=test.echo&foo=bar"
+    $ curl "https://api.linode.com/" \
+          -d "api_key=SECRETKEY" \
+          -d "api_action=test.echo" \
+          -d "foo=bar"
+
+You can see the full teardown and analysis of the DNS Manager portion of this API at :doc:`deconstructing-linode-dnsmanager`.
 
 
 Function Endpoint
@@ -28,6 +42,8 @@ Function Endpoint
 
 An API where there are multiple endpoints, each providing a function to run. 
 Query arguments are then added to these endpoints, specifying what data or identifier to operate on.
+
+This layout is similar to **Single Endpoint**, but instead of specifying what function to run by a query argument, it is encoded in the URL.
 
 Example: Blog
 ~~~~~~~~~~~~~
@@ -53,7 +69,12 @@ RFC-3986 Style
 --------------
 
 An API which is laid out in the vein of :rfc:`3986`.
-This is characterised by object types and identifiers being in the URI.
+This is characterised by object types and identifiers being in the URL.
+
+Laid out like this, it allows a single record of data to be referred to entirely in the URL.
+Most uses of this style of API are data-driven -- when clients put information into the system, actions which handle new/changed data are run implicitly.
+Functions are usually handled by a resource that accepts ``POST`` requests
+
 
 Real World Example: Stripe
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -99,7 +120,7 @@ Stripe's API uses ``POST`` for updating.
 
 .. note::
 
-   There is a ``PATCH`` verb which developers could implement for updating instead.
+   There exists a ``PATCH`` verb which developers could implement for updating instead.
 
 Deleting a customer uses the ``DELETE`` verb:
 
@@ -112,10 +133,44 @@ Deleting a customer uses the ``DELETE`` verb:
 
    Use of ``-X`` overrides the HTTP verb that cURL uses.
 
+
+Real World Example: Tesla Model S
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The `Tesla Model S' API <http://docs.timdorr.apiary.io/>`_ mostly follows this system, where vehicles are referred to by ID in the URI, but a request to a function endpoint under that vehicle will perform an action.
+
+You can fetch resources as you expect:
+
+.. code-block:: sh
+
+   $ curl https://portal.vn.teslamotors.com/vehicles/1/command/gui_settings
+
+.. code-block:: json
+
+   {
+      "gui_distance_units": "mi/hr",
+      "gui_temperature_units": "F",
+      "gui_charge_rate_units": "mi/hr",
+      "gui_24_hour_time": false,
+      "gui_range_display": "Rated"
+   }
+
+Running functions (which, in this case, does something in the real world!) is also possible by POST requests:
+
+.. code-block:: sh
+
+   $ curl -x POST https://portal.vn.teslamotors.com/vehicles/1/command/honk_horn
+
+.. code-block:: json
+
+   {
+      "result": true,
+      "reason": ""
+   }
+
+
 Good URIs Never Change
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The benefit of such a layout is that the reference to any particular object always stays the same.
-There is no 'leaking through' of the framework or the implementation, since you are sending data to an endpoint, not running a 'function'.
-
-
+There is no 'leaking through' of the framework or the implementation, since you are sending data to a resource, not running a 'function' to mutate/query it.

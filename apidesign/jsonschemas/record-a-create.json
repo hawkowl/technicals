@@ -1,0 +1,29 @@
+{
+    "description": "Record -- A Create",
+    "type": "object",
+    "required": ["host", "target"],
+    "properties": {
+	"host": {
+	    "title": "The subdomain under this record.",
+	    "type": "string",
+	    "format": "hostname"
+	},
+	"target": {
+	    "title": "Target that this A record should point at.",
+	    "anyOf": [
+		{
+		    "type": "string",
+		    "format": "ipv4"
+		},
+		{
+		    "type": "string",
+		    "format": "ipv6"
+		}
+	    ]
+	},
+	"ttl": {
+	    "title": "TTL for this record.",
+	    "type": "integer"
+	}
+    }
+}

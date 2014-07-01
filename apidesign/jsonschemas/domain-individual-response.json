@@ -1,8 +1,11 @@
 {
-    "description": "Domain -- Create",
+    "description": "Domain -- Create Response",
     "type": "object",
-    "required": ["domain", "soa"],
     "properties": {
+	"id": {
+	    "title": "The ID of this domain.",
+	    "type": "integer"
+	},
 	"domain": {
 	    "title": "The base for this domain.",
 	    "type": "string",
