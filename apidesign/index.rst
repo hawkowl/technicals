@@ -10,6 +10,7 @@ Contents:
 
    versioning
    layout
+   pragmatic-rest
    authentication
    security
    deconstructing-linode-dnsmanager
