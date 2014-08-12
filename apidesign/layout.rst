@@ -73,7 +73,7 @@ This is characterised by object types and identifiers being in the URL.
 
 Laid out like this, it allows a single record of data to be referred to entirely in the URL.
 Most uses of this style of API are data-driven -- when clients put information into the system, actions which handle new/changed data are run implicitly.
-Functions are usually handled by a resource that accepts ``POST`` requests
+When 'functions' are required, they are usually handled by a resource that accepts ``POST`` requests.
 
 
 Real World Example: Stripe
@@ -169,7 +169,7 @@ Running functions (which, in this case, does something in the real world!) is al
    }
 
 
-Good URIs Never Change
+Resources, not functions
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The benefit of such a layout is that the reference to any particular object always stays the same.

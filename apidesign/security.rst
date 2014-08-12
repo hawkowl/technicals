@@ -1,19 +1,21 @@
 Security
 ========
 
-**Tenet:**
-Good API services provide endpoints that employ high-grade transport layer security.
+User data should not be sniffable
+-----
 
-It is 2014, we don't need to be forcing our users to send data over RC4-(in)secured connections.
-Your service should get at least an A on `Qualys SSL Test <https://www.ssllabs.com/ssltest/>`_.
+Users of your service should be protected by high-grade transport security (TLS/SSL).
+Your service should get at least an A on `Qualys SSL Test <https://www.ssllabs.com/ssltest/>`_, and all access to your API should be over TLS.
 
-**Tenet:**
-Good API services should store no authentication-related information in plaintext.
+
+User-set secrets should not be recoverable
+---------
 
 User passwords should never be stored in plain text.
-Use PBKDF2, bcrypt, or scrypt.
-No exceptions.
+Use PBKDF2, bcrypt, or scrypt to protect them, as users may reuse username/password combinations
 
-API keys should also not be stored in plain text -- encourage your users to connect to your service using a new key for each device.
+API keys should also not be recoverable through your interface -- encourage your users to connect to your service using a new key for each device.
+Since they are random, in the case of a data breach, all API keys can be purged and recreated.
 
-If your API service is for an application, make your app create an API key upon authentication, and use that for authenticating to the service instead.
+If your API service is for an application, make your app create an API key upon authentication, and use that for authenticating to the service.
+This prevents having to store user secrets on the device, and allows your users to revoke access from old devices.
