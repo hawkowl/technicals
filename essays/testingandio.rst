@@ -1,6 +1,20 @@
 Testing & I/O
 =============
 
+It is said that a watched pot never boils, and I find that the same is with untested code.
+You write it, you run it, it seems to work, you push it into production, and call it a day.
+Unfortunately, as soon as you purge the knowledge of that code ever existing from your mind, a user will decide that today is the day that their cat will do some data entry, and everything falls apart.
+
+The most generally accepted approach to preventing your application from having some fatal bug in it is through testing your code -- that is, "watching" your code.
+An automated set of eyes to make sure that all is sane, and that when the user decides to set their display name to "H́E̸̡͟ ̵͘C͘O̷M͞ÉS̢" that it doesn't explode with a nasty red page and big letters saying ``UnicodeDecodeError``.
+
+Generally, this testing comes in the form of:
+
+
+
+Execution tests that run the code, static analysis that checks for unused variables, and linters that check code style are three things that are in common use for making sure that a project's code is top notch.
+These
+
 
 haha work in progress
 
