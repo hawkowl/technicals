@@ -8,12 +8,21 @@ Unfortunately, as soon as you purge the knowledge of that code ever existing fro
 The most generally accepted approach to preventing your application from having some fatal bug in it is through testing your code -- that is, "watching" your code.
 An automated set of eyes to make sure that all is sane, and that when the user decides to set their display name to "H́E̸̡͟ ̵͘C͘O̷M͞ÉS̢" that it doesn't explode with a nasty red page and big letters saying ``UnicodeDecodeError``.
 
-Generally, this testing comes in the form of:
+Generally, this automated testing is done to make sure that the code:
 
+- is syntactically correct -- free from syntax errors
+- is computationally correct -- that given inputs give the correct output
+- is "clean" -- matches style guides, has no unused variables
+- fufils business requirements -- that it works, as an element of a system as a whole, to do the task the system was written to do
 
+Different types of testing will do one or more of the things above.
+Static analysis will make sure that the code is clean and meets style guides, unit tests will make sure the code is both forms of correct as mentioned, and integration tests will make sure that it meets the business requirements it was written to solve.
+I, here, am talking about unit tests.
 
-Execution tests that run the code, static analysis that checks for unused variables, and linters that check code style are three things that are in common use for making sure that a project's code is top notch.
-These
+What is unit testing?
+---------------------
+
+Unit testing is when individual portions of your code ("units") are tested in isolation of the rest of the system.
 
 
 haha work in progress
