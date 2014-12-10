@@ -13,5 +13,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   essays/index.rst
    twisted/index.rst
    apidesign/index.rst
