@@ -9,3 +9,4 @@ Contents:
    :maxdepth: 1
 
    twistdplugins
+   anewwebframework
