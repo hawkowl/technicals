@@ -24,7 +24,7 @@ class MySweetWebService(PluggableResource):
         """
         Only available to logged in users.
         """
-        loginOk = yield self.augments.auth.checkLogin(request)
+        loginOk = yield self.augments['authentication'].checkLogin(request)
 
         if loginOk:
             post = yield self.db.fetchPostBySlug(postSlug)
@@ -77,5 +77,6 @@ class UserAuthenticationService(object):
 db = DBThing()
 
 service = MySweetWebService("base", db)
-service.augment(UserAuthenticationService("auth", db))
+service.augment("authentication",
+                UserAuthenticationService("authentication", db))
 service.run('localhost', 8080)
