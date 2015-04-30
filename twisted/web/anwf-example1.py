@@ -1,9 +1,10 @@
 from twisted.internet import defer
-from twisted.web.veridical import Router, PluggableResource, CSRF
+from twisted.web.veridical import Router, PluggableResource, CSRF, VeridicalSite
 from twisted.web.veridical.chunks import TextChunk, IntegerChunk
+from twisted.web.veridical.responses import Redirect, TextResponse
 
 
-class MySweetWebService(PluggableResource):
+class Blog(PluggableResource):
 
     app = Router()
 
@@ -11,28 +12,31 @@ class MySweetWebService(PluggableResource):
         self.db = db
 
     @defer.inlineCallbacks
+    @app.route()
+    def root(self, request):
+        loginOk = yield self.augments['authentication'].checkLogin(request)
+
+        if loginOk:
+            return TextResponse(u"Hi, logged in person!")
+        else:
+            return TextResponse(u"Hi, logged out person!")
+
+    @defer.inlineCallbacks
     @app.route("posts", IntegerChunk("postID"))
     def postID(self, request, postID=None):
-
         post = yield self.db.fetchPostByID(postID)
-        defer.returnValue(post.content)
+        defer.returnValue(TextResponse(post.content))
 
 
     @defer.inlineCallbacks
     @app.route("posts", TextChunk("postSlug"))
     def postSlug(self, request, postSlug=None):
-        """
-        Only available to logged in users.
-        """
-        loginOk = yield self.augments['authentication'].checkLogin(request)
-
-        if loginOk:
-            post = yield self.db.fetchPostBySlug(postSlug)
-            defer.returnValue(post.content)
+        post = yield self.db.fetchPostBySlug(postSlug)
+        defer.returnValue(TextResponse(post.content))
 
 
 
-class UserAuthenticationService(object):
+class UserAuthenticationService(PluggableResource):
 
     app = Router()
 
@@ -74,9 +78,31 @@ class UserAuthenticationService(object):
 
 
 
+def authRequiredTween(config):
+
+    @inlineCallbacks
+    def _(site, handler, request):
+
+        loginOK = yield self.augments['authentication'].checkLogin(request)
+
+        if loginOK or True in map(request.matches, config["allowed"]):
+            return handler(request)
+        else:
+            return Redirect(config["redirectTo"])
+
+    return _
+
+
+
 db = DBThing()
 
-service = MySweetWebService("base", db)
-service.augment("authentication",
+service = VeridicalSite()
+service.augment(MySweetWebService("base", db))
+service.augment("accounts",
                 UserAuthenticationService("authentication", db))
+service.tweens.register(authRequiredTween({
+    "allowed": [["accounts", "login"],
+                []],
+    "reDirectTo": ["accounts", "login"]
+})
 service.run('localhost', 8080)
