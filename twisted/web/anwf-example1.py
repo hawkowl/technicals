@@ -35,6 +35,14 @@ class Blog(object):
         defer.returnValue(TextResponse(post.content))
 
 
+class HumansTXT(object):
+
+    router = Router()
+
+    @router.route("humans.txt")
+    def humansTXT(self, request):
+        return TextResponse(u"this website was actually made by robots")
+
 
 class UserAuthenticationService(object):
 
@@ -108,11 +116,18 @@ authenticationRequiredMiddleware = authRequiredMiddleware({
     "reDirectTo": ["accounts", "login"]
 })
 
+# Add a humans.txt to the blog service
+blog.router.augment(HumansTXT())
+
+# Make a default, empty site.
 service = VeridicalSite()
 
-service.augment(blog)
-service.augment("accounts", authentication)
+# Add two augments, blog on the root level, and authentication under accounts/
+service.router.augment(blog)
+service.router.augment("accounts", authentication)
 
-service.middleware.register(authenticationRequiredMiddleware)
+# Register some middleware on the site's router
+service.router.middleware.register(authenticationRequiredMiddleware)
 
-service.run('localhost', 8080)
+# Convenience function
+service.router.run('localhost', 8080)
