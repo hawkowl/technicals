@@ -149,3 +149,10 @@ service.router.run('localhost', 8080)
 # routes / and /hello, and that augment had an augment with the routes /hi and
 # /there, the request for /hi would be on the first router, /hello would be on
 # the second router, and /there would be on the third router.
+
+# As another example, say you have a router with the routes / and /hi, and an
+# augment under /hi/there which has the routes / and /foo. If the request /hi
+# was given, the first router's /hi would get it. But the request /hi/foo would
+# go to the second, as there is no direct match, and it would be passed to the
+# second router (albeit as just "/foo", as the "hi" was consumed by the router
+# that was augmented).
