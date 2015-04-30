@@ -4,15 +4,15 @@ from twisted.web.veridical.chunks import TextChunk, IntegerChunk
 from twisted.web.veridical.responses import Redirect, TextResponse
 
 
-class Blog(PluggableResource):
+class Blog(object):
 
-    app = Router()
+    router = Router()
 
     def __init__(self, db):
         self.db = db
 
     @defer.inlineCallbacks
-    @app.route()
+    @router.route()
     def root(self, request):
         loginOk = yield self.augments['authentication'].checkLogin(request)
 
@@ -22,23 +22,23 @@ class Blog(PluggableResource):
             return TextResponse(u"Hi, logged out person!")
 
     @defer.inlineCallbacks
-    @app.route("posts", IntegerChunk("postID"))
+    @router.route("posts", IntegerChunk("postID"))
     def postID(self, request, postID=None):
         post = yield self.db.fetchPostByID(postID)
         defer.returnValue(TextResponse(post.content))
 
 
     @defer.inlineCallbacks
-    @app.route("posts", TextChunk("postSlug"))
+    @router.route("posts", TextChunk("postSlug"))
     def postSlug(self, request, postSlug=None):
         post = yield self.db.fetchPostBySlug(postSlug)
         defer.returnValue(TextResponse(post.content))
 
 
 
-class UserAuthenticationService(PluggableResource):
+class UserAuthenticationService(object):
 
-    app = Router()
+    router = Router()
 
     def __init__(self, ID, db):
         self.db = db
@@ -51,18 +51,18 @@ class UserAuthenticationService(PluggableResource):
         defer.returnValue(isOk)
 
 
-    @app.router("login")
+    @router.route("login")
     def login(self, request):
 
         CSRF.setToken(request)
 
         with open("loginpage.html") as f:
             loginPage = f.read()
-        return loginPage
+        return TextResponse(loginPage)
 
 
     @defer.inlineCallbacks
-    @app.router("login", method="POST")
+    @router.route("login", method="POST")
     def login_POST(self, request):
 
         if CSRF.checkToken(request):
@@ -71,14 +71,19 @@ class UserAuthenticationService(PluggableResource):
 
             if authCookie:
                 request.setCookie("SESSION", authCookie)
+                defer.returnValue(Redirect())
             else:
-                raise Exception("Login Failed") # lol?
+                response = TextResponse(u"login failed")
+                response.setCode(400)
+                defer.returnValue(response)
         else:
-            raise CSRF.failed()
+            response = TextResponse(u"CSRF failed")
+            response.setCode(400)
+            defer.returnValue(response)
 
 
 
-def authRequiredTween(config):
+def authRequiredMiddleware(config):
 
     @inlineCallbacks
     def _(site, handler, request):
@@ -88,21 +93,26 @@ def authRequiredTween(config):
         if loginOK or True in map(request.matches, config["allowed"]):
             return handler(request)
         else:
-            return Redirect(config["redirectTo"])
+            return Redirect(*config["redirectTo"])
 
     return _
 
 
 
 db = DBThing()
-
-service = VeridicalSite()
-service.augment(MySweetWebService("base", db))
-service.augment("accounts",
-                UserAuthenticationService("authentication", db))
-service.tweens.register(authRequiredTween({
+blog = Blog("base", db)
+authentication = UserAuthenticationService("authentication", db)
+authenticationRequiredMiddleware = authRequiredMiddleware({
     "allowed": [["accounts", "login"],
                 []],
     "reDirectTo": ["accounts", "login"]
-}))
+})
+
+service = VeridicalSite()
+
+service.augment(blog)
+service.augment("accounts", authentication)
+
+service.middleware.register(authenticationRequiredMiddleware)
+
 service.run('localhost', 8080)
