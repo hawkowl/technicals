@@ -131,3 +131,21 @@ service.router.middleware.register(authenticationRequiredMiddleware)
 
 # Convenience function
 service.router.run('localhost', 8080)
+
+# The routing table will look like this
+
+# / -> blog.root
+# /posts/<int:postID> -> blog.postID
+# /posts/<str:postSlug> -> blog.postSlug
+# /humans.txt -> HumansTXT.humansTXT
+# /accounts/login -> authentication.login
+
+# The order of routing is:
+# 1. Routes defined directly on the router.
+# 2. Routes defined in augments in the order they were added.
+# 3. 404.
+
+# For example, if the router had / and /hi, and it had an augment with the
+# routes / and /hello, and that augment had an augment with the routes /hi and
+# /there, the request for /hi would be on the first router, /hello would be on
+# the second router, and /there would be on the third router.
