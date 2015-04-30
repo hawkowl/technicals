@@ -104,5 +104,5 @@ service.tweens.register(authRequiredTween({
     "allowed": [["accounts", "login"],
                 []],
     "reDirectTo": ["accounts", "login"]
-})
+}))
 service.run('localhost', 8080)
